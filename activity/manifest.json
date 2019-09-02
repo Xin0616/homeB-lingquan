@@ -83,17 +83,13 @@
 	        "disableHostCheck" : true,
 	        "proxy" : {
 	            "/home" : {
-					// "target" : "http://192.168.10.151:9391",
-	                "target" : "https://daojia.gray.motivape.cn/api",
+	                "target" : "https://daojia.motivape.cn/api",
 	                "changeOrigin" : true,
 	                "secure" : false
 	            }
 	        }
 	    },
 	    "template" : "index.html",
-	    "router" : {
-	        "base" : "/daojiab/"
-	    },
 	    "title" : "MOTI小店"
 	}
 }
