@@ -114,7 +114,8 @@
 			},
 			//去使用优惠券
 			toUseCoupon(){
-				location.href = 'https://daojia.gray.motivape.cn/daojiab'
+				urlHost = location.origin
+				location.href = urlHost + '/daojiab'
 			},
 			//注册登录-领取优惠券
 			async shopUserRegist() {
