@@ -42,7 +42,7 @@
 							</view>
 							<view class="codeRight">
 								<view class="name">{{couponInfo.couponName}}</view>
-								<view class="time">有效期至：{{couponInfo.endTime}}</view>
+								<view class="time">有效期至：{{couponInfo.invalidTime}}</view>
 							</view>
 						</view>
 					</view>
@@ -52,7 +52,7 @@
 		</view>
 		<view class="middleBox">
 			<image src='../../static/code.png' class="codeImg"></image>
-			<image src='../../static/upgrade.png' class="upgrade"></image>
+			<image @tap="imgPath" src='../../static/upgrade.png' class="upgrade"></image>
 			<image src='../../static/rule.png' class="textImg"></image>
 		</view>
 		<view class="footer">
@@ -97,10 +97,24 @@
 				}
 			}
 		},
+		mounted() {
+			// 友盟统计添加
+			const script = document.createElement("script");
+			script.src = "https://s96.cnzz.com/z_stat.php?id=1277768398&web_id=1277768398";
+			script.language = "JavaScript";
+			document.body.appendChild(script);
+			console.log('youmeng')
+		},
 		methods: {
 			submit() {
 				if(this.btnText == '立即领取'){ 
 					// 注册登录并领取优惠券
+					if(this.checkMobile(this.info.mobile)){
+						this.errorInfo.mobile = false;
+					}else{
+						this.errorInfo.mobile = true;
+						return;
+					}
 					if (this.checkCode()) {
 						this.errorInfo.code = false;
 					} else {
@@ -114,7 +128,7 @@
 			},
 			//去使用优惠券
 			toUseCoupon(){
-				urlHost = location.origin
+				let urlHost = location.origin
 				location.href = urlHost + '/daojiab'
 			},
 			//注册登录-领取优惠券
@@ -180,6 +194,9 @@
 					this.timeDown = 90
 					this.showErr(msg || '获取验证码失败')
 				}
+			},
+			imgPath(){
+				window.open('https://h5.youzan.com/wscump/salesman/index?kdt_id=43411823#/','_blank');
 			},
 			checkMobile() {
 				let reg = /^1[3456789]\d{9}$/
