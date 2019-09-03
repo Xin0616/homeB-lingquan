@@ -3,7 +3,7 @@ import {request} from '@/common/request.js'
 //领取优惠券
 export function shopUserRegist(data){
 	return request({
-		url:'/home/shopuser/shopUserRegist',
+		url:'/home/shopuser/activityShopUserRegist',
 		methods:"post",
 		contentType: 'application/x-www-form-urlencoded',
 		data

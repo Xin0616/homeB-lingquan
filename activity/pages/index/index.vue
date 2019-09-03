@@ -24,12 +24,27 @@
 							</view>
 						</view>
 						<text v-if="!isGotCode" class="title code" @tap='getCode'>获取验证码</text>
-						<text v-else class="title code">{{timeDown}}S</text>
+						<text v-else class="title code">{{timeDown}}s</text>
 					</view>
 				</template>
 				<template v-else>
-					<view class="codeImage">
-						<image :src='showImgPath'></image>
+					<view class="afterLogin">
+						<view class="codeText">
+							{{showText}}
+						</view>
+						<view class="codeImage">
+							<view class="codeLeft">
+								<view style="font-weight: 600;">	
+									<text class="num">{{couponInfo.discountRate * 10}}</text>
+									<text class="zhe">折</text>
+								</view>
+								<view>全场通用</view>
+							</view>
+							<view class="codeRight">
+								<view class="name">{{couponInfo.couponName}}</view>
+								<view class="time">有效期至：{{couponInfo.endTime}}</view>
+							</view>
+						</view>
 					</view>
 				</template>
 				<button @tap='submit' class='btn'>{{btnText}}</button>
@@ -41,7 +56,7 @@
 			<image src='../../static/rule.png' class="textImg"></image>
 		</view>
 		<view class="footer">
-			北京焱焱科技有限公司&nbsp;&nbsp;京ICP&nbsp;备&nbsp;19024458&nbsp;号&nbsp;-1
+			北京焱炎科技有限公司&nbsp;&nbsp;京ICP&nbsp;备&nbsp;19024458&nbsp;号&nbsp;-1
 		</view>
 	</view>
 </template>
@@ -66,9 +81,11 @@
 					code: '',
 					mobile: ''
 				},
+				showType: false,
 				btnText:'立即领取',
-				showImgPath: '../../static/coupon1.png',
-				showType: false
+				showText:'恭喜！您已成功领取优惠券',
+				showImgPath: '../../static/coupon.png',
+				couponInfo:{}
 			};
 		},
 		watch: {
@@ -97,7 +114,7 @@
 			},
 			//去使用优惠券
 			toUseCoupon(){
-				location.href = 'https://daojia.motivape.cn/daojiab#/'
+				location.href = 'https://daojia.gray.motivape.cn/daojiab'
 			},
 			//注册登录-领取优惠券
 			async shopUserRegist() {
@@ -109,9 +126,15 @@
 				let { code, result, msg } = await shopUserRegist(data);
 				if (code == 0) {
 					this.btnText = '立即使用'
+					this.showType = true
 					// 存储跟daojiaB所需的登录信息
-					uni.setStorageSync('userInfo', result);
-					console.log('查询优惠券领取状态');
+					uni.setStorageSync('userInfo', result.shopInfo);
+					// 优惠券信息展示
+					this.couponInfo = result.coupon
+					// 区分是否领取过当前优惠券
+					if(!result.isReceive){ // isReceive -false-已领取 -true-未领取
+						this.showText = '您已领取过优惠券'
+					}
 				} else {
 					this.showErr(msg);
 				}
@@ -121,10 +144,11 @@
 					let { code, result, msg } = await checkShopUserMobile(this.info.mobile);
 					if (code == 0) {
 						let codeType = 0;
+						//105:用户注册；106:手机号登录；107:修改密码;
 						if (result.isRegister == 0) { //未注册
-							codeType = 106
-						} else { // 已注册
 							codeType = 105
+						} else { // 已注册
+							codeType = 106
 						}
 						this.getDynamicCode(codeType);
 					} else {
@@ -231,14 +255,52 @@
 					border-radius: 8upx;
 					margin: 77upx 0;
 				}
-				.codeImage{
+				.afterLogin{
 					text-align: center;
 					padding-top: 60upx;
-					image{
+					display: flex;
+					justify-content: center;
+					flex-direction: column;
+					.codeText{
+						margin-bottom: 40upx;
+						font-size: 40upx;
+						font-weight: 600;
+					}
+					.codeImage{
+						margin: 0 auto;
 						width: 580upx;
-						height: 265upx;
+						height: 190upx;
+						background: url('../../static/coupon.png') no-repeat;
+						background-size: 100% 100%;
+						display: flex;
+						justify-content: space-around;
+						align-items: center;
+						color: #fff;
+						overflow: hidden;
+						.codeLeft{
+							width: 30%;
+							font-size: 24upx;
+							.num{
+								font-size: 80upx;
+							}
+							.zhe{
+								font-size: 32upx;
+							}
+						}
+						.codeRight{
+							width: 58%;
+							font-size: 24upx;
+							text-align: left;
+							.name{
+								font-size: 40upx;
+								font-weight: 600;
+								height: 104upx;
+								line-height: 104upx;
+							}
+						}
 					}
 				}
+				
 				.lineLi {
 					padding-top: 1upx;
 					display: flex;
