@@ -51,9 +51,15 @@
 			</view>
 		</view>
 		<view class="middleBox">
-			<image src='../../static/code.png' class="codeImg"></image>
-			<image @tap="imgPath" src='../../static/upgrade.png' class="upgrade"></image>
-			<image src='../../static/rule.png' class="textImg"></image>
+			<view class="codeImg">
+				<image src='../../static/code.png'></image>
+			</view>
+			<view @tap="imgPath">
+				<image  src='../../static/upgrade.png' class="upgrade"></image>
+			</view>
+			<view class="">
+				<image src='../../static/rule.png' class="textImg"></image>
+			</view>
 		</view>
 		<view class="footer">
 			北京焱炎科技有限公司&nbsp;&nbsp;京ICP&nbsp;备&nbsp;19024458&nbsp;号&nbsp;-1
@@ -100,7 +106,7 @@
 		mounted() {
 			// 友盟统计添加
 			const script = document.createElement("script");
-			script.src = "https://s96.cnzz.com/z_stat.php?id=1277768398&web_id=1277768398";
+			script.src = "https://s9.cnzz.com/z_stat.php?id=1277890458&web_id=1277890458";
 			script.language = "JavaScript";
 			document.body.appendChild(script);
 			console.log('youmeng')
@@ -239,6 +245,11 @@
 
 			.codeImg {
 				height: 768upx;
+				image{
+					width: 100%;
+					height: 100%;
+					-webkit-touch-callout: default!important;
+				}
 			}
 
 			.upgrade {
@@ -336,6 +347,7 @@
 							color: #333333;
 							align-self: flex-end;
 							margin-right: 39upx;
+							flex-shrink: 0;
 						}
 
 						.middle {
@@ -365,6 +377,7 @@
 
 					.code {
 						align-self: flex-end;
+						flex-shrink: 0;
 					}
 				}
 			}
