@@ -20,7 +20,7 @@
 							<view class="middle">
 								<view class="errorMsg" v-if='errorInfo.code'>验证码错误，请重新输入</view>
 								<text class="section"></text>
-								<input v-model="info.code" type="text" placeholder="请输入动态码">
+								<input v-model="info.code" maxlength="6" type="text" placeholder="请输入动态码">
 							</view>
 						</view>
 						<text v-if="!isGotCode" class="title code" @tap='getCode'>获取验证码</text>
