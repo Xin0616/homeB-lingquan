@@ -91,7 +91,8 @@
 				btnText:'立即领取',
 				showText:'恭喜！您已成功领取优惠券',
 				showImgPath: '../../static/coupon.png',
-				couponInfo:{}
+				couponInfo:{},
+				sourceInfo:{} // 渠道来源对象
 			};
 		},
 		watch: {
@@ -103,7 +104,33 @@
 				}
 			}
 		},
-		
+		onLoad(options) {
+			const query = options.query;
+			let sourceInfo = {};
+			if(query){
+				sourceInfo = {
+					material: query.material,
+					orderSource: query.orderSource,
+					channel: query.channel
+				}
+			}else{
+				sourceInfo = {
+					material: '',
+					orderSource: '',
+					channel: ''
+				}
+			}
+			this.sourceInfo = sourceInfo;
+			// 友盟统计添加
+			const script = document.createElement("script");
+			script.src = "https://s96.cnzz.com/z_stat.php?id=1277768398&web_id=1277768398";
+			script.language = "JavaScript";
+			document.body.appendChild(script);
+			// 声明_czc对象
+			var _czc = _czc || [];
+			_czc.push(['_setAccount','1277890458'])
+			
+		},
 		methods: {
 			submit() {
 				if(this.btnText == '立即领取'){ 
@@ -127,6 +154,7 @@
 			},
 			//去使用优惠券
 			toUseCoupon(){
+				_czc.push(['_trackEvent','立即使用按钮','立即使用',`material=${this.sourceInfo.material}+channel=${this.sourceInfo.channel}`,'','btnCon'])
 				let urlHost = location.origin
 				location.href = urlHost + '/daojiab'
 			},
@@ -139,6 +167,7 @@
 				}
 				let { code, result, msg } = await shopUserRegist(data);
 				if (code == 0) {
+					_czc.push(['_trackEvent','立即领券按钮','领券',`material=${this.sourceInfo.material}+channel=${this.sourceInfo.channel}`,'','btnCon'])
 					this.btnText = '立即使用'
 					this.showType = true
 					// 存储跟daojiaB所需的登录信息
