@@ -105,7 +105,7 @@
 			}
 		},
 		onLoad(options) {
-			const query = options.query;
+			const query = options;
 			let sourceInfo = {};
 			if(query){
 				sourceInfo = {
