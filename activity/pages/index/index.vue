@@ -154,7 +154,7 @@
 			},
 			//去使用优惠券
 			toUseCoupon(){
-				_czc.push(['_trackEvent','立即使用按钮','立即使用',`material=${this.sourceInfo.material}+channel=${this.sourceInfo.channel}`,'','btnCon'])
+				_czc.push(['_trackEvent','领券get_coup_stat','立即使用',`material=${this.sourceInfo.material}+channel=${this.sourceInfo.channel}`,'','btnCon'])
 				let urlHost = location.origin
 				location.href = urlHost + '/daojiab'
 			},
@@ -167,7 +167,7 @@
 				}
 				let { code, result, msg } = await shopUserRegist(data);
 				if (code == 0) {
-					_czc.push(['_trackEvent','立即领券按钮','领券',`material=${this.sourceInfo.material}+channel=${this.sourceInfo.channel}`,'','btnCon'])
+					_czc.push(['_trackEvent','领券get_coup_ent','立即领取',`material=${this.sourceInfo.material}+channel=${this.sourceInfo.channel}`,'','btnCon'])
 					this.btnText = '立即使用'
 					this.showType = true
 					// 存储跟daojiaB所需的登录信息
