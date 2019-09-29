@@ -128,7 +128,7 @@
 			document.body.appendChild(script);
 			// 声明_czc对象
 			var _czc = _czc || [];
-			_czc.push(['_setAccount','1277890458'])
+			_czc.push(['_setAccount','1277890458']) 
 			
 		},
 		methods: {
@@ -407,3 +407,4 @@
 
 	}
 </style>
+
