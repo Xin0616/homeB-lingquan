@@ -30,7 +30,7 @@
 				<template v-else>
 					<view class="afterLogin">
 						<view class="codeText">
-							{{showText}}
+							{{ showText }}
 						</view>
 						<view class="codeImage">
 							<view class="codeLeft">
@@ -47,7 +47,11 @@
 						</view>
 					</view>
 				</template>
-				<button @tap='submit' class='btn'>{{btnText}}</button>
+				<button @tap.stop='submit' class='btn' v-track-event="{
+						category: '领券',
+						action: '',
+						label: `${btnText=='立即领取'?'领券get_coup_ent':'领券get_coup_stat'}+material=${sourceInfo.material}+channel=${sourceInfo.channel}`
+					}">{{btnText}}</button>
 			</view>
 		</view>
 		<view class="middleBox">
@@ -104,35 +108,13 @@
 				}
 			}
 		},
-		onLoad(options) {
-			const query = options;
-			let sourceInfo = {};
-			if(query){
-				sourceInfo = {
-					material: query.material,
-					orderSource: query.orderSource,
-					channel: query.channel
-				}
-			}else{
-				sourceInfo = {
-					material: '',
-					orderSource: '',
-					channel: ''
-				}
-			}
-			this.sourceInfo = sourceInfo;
-			// 友盟统计添加
-			const script = document.createElement("script");
-			script.src = "https://s96.cnzz.com/z_stat.php?id=1277768398&web_id=1277768398";
-			script.language = "JavaScript";
-			document.body.appendChild(script);
-			// 声明_czc对象
-			var _czc = _czc || [];
-			_czc.push(['_setAccount','1277890458']) 
-			
+		onShow() {
+			this.sourceInfo = uni.getStorageSync('sourceInfo');
 		},
 		methods: {
-			submit() {
+			async submit() {
+				console.log(this.btnText)
+				let that = this;
 				if(this.btnText == '立即领取'){ 
 					// 注册登录并领取优惠券
 					if(this.checkMobile(this.info.mobile)){
@@ -149,12 +131,18 @@
 					}
 					this.shopUserRegist();
 				}else if(this.btnText == '立即使用'){
-					this.toUseCoupon()
+					// uni.showToast({
+					// 	icon: 'none',
+					// 	title: '即将跳转页面~'
+					// })
+					await setTimeout(function() {
+						that.toUseCoupon()
+					}, 1000);
+					
 				}
 			},
 			//去使用优惠券
 			toUseCoupon(){
-				_czc.push(['_trackEvent','领券get_coup_stat','立即使用',`material=${this.sourceInfo.material}+channel=${this.sourceInfo.channel}`,'','btnCon'])
 				let urlHost = location.origin
 				location.href = urlHost + '/daojiab'
 			},
@@ -167,7 +155,6 @@
 				}
 				let { code, result, msg } = await shopUserRegist(data);
 				if (code == 0) {
-					_czc.push(['_trackEvent','领券get_coup_ent','立即领取',`material=${this.sourceInfo.material}+channel=${this.sourceInfo.channel}`,'','btnCon'])
 					this.btnText = '立即使用'
 					this.showType = true
 					// 存储跟daojiaB所需的登录信息
